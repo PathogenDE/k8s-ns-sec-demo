@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pong-app-deployment
+  labels:
+    app: pong-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pong-app
+  template:
+    metadata:
+      labels:
+        app: pong-app
+    spec:
+      containers:
+        - name: pong-app
+          image: docker.io/pathogen/pong-app:v1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pong-app-service
+spec:
+  selector:
+    app: pong-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
