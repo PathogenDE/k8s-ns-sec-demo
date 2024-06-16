@@ -1,0 +1,6 @@
+*.crt
+*.key
+*.csr
+config_bob
+
+/secrets
